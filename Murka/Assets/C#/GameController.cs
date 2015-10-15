@@ -27,8 +27,8 @@ public class GameController : MonoBehaviour
 		_pointsLabel;
 
 	[SerializeField]
-	private Grid
-		_grid;
+	private GameObject
+		_gridParent;
 
 	[SerializeField]
 	private GameObject
@@ -104,7 +104,7 @@ public class GameController : MonoBehaviour
 			return;
 		}
 
-		if (!_grid) {
+		if (!_gridParent) {
 			Debug.Log ("Grid is null");
 			return;
 		}
@@ -140,7 +140,7 @@ public class GameController : MonoBehaviour
 		}
 		#endregion
 
-		_grid.gameObject.SetActive (_geometryBoundary.IsAddGeometry);
+		_gridParent.SetActive (_geometryBoundary.IsAddGeometry);
 		_gameView.SetActive (false);
 
 		_compareGeo.Corectly += HandleCorectly;
@@ -182,7 +182,7 @@ public class GameController : MonoBehaviour
 	private void CountDownDealay ()
 	{
 		_gameView.SetActive (true);
-		_grid.gameObject.SetActive (true);	
+		_gridParent.gameObject.SetActive (true);	
 		StartCoroutine (TimeLeft (_timeLeft));
 		StartGameHandler ();
 

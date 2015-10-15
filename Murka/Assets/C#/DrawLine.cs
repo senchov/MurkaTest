@@ -157,25 +157,6 @@ public class DrawLine : MonoBehaviour
 	}
 
 
-	private List <Vector2> ToLogicPoints (List <Vector2> someList)
-	{
-		List<Vector2> tempList = new List<Vector2> ();
-		for (int i = 0; i < someList.Count; i++) {
-			Vector2 temp = _grid.WorldToLogic (someList [i]);
-			if (!tempList.Contains (temp)) {
-				tempList.Add (temp);
-			}
-		}
-		return tempList;
-	}
-
-	private void ToWorldPoints (List <Vector2> someList)
-	{
-		for (int i = 0; i < someList.Count; i++) {
-			Vector2 temp = _grid.LogicToWorld ((int)someList [i].x, (int)someList [i].y);
-			_anotherList.Add (temp);
-		}
-	}
 
 	private List<Vector2> DeletePoints (List <Vector2> list, int startIndex)
 	{
@@ -279,96 +260,6 @@ public class DrawLine : MonoBehaviour
 		RemoveFrom_points (tempList);
 	}
 
-
-	private void FindVetex (List <Vector2> points)
-	{
-		Vector2 anchor = points [0];
-		//	bool flagX = true;
-		_checkPoints.Add (points [0]);
-		for (int i = 1; i < points.Count; i++) {
-			Vector2 temp = _grid.WorldToLogic (points [i - 1]);
-			Vector2 temp2 = _grid.WorldToLogic (points [i]);
-			if (Mathf.Abs (temp.x - temp2.x) > Mathf.Abs (temp.y - temp2.y)) {
-				if (IsDirectionChange (true)) {
-					_checkPoints.Add (points [i]);
-					//anchor = points [i - 1];
-				}
-			} else {
-				if (IsDirectionChange (false)) {
-					_checkPoints.Add (points [i]);
-					//anchor = points [i - 1];
-				}
-			}
-
-
-
-		}
-	}
-
-	private bool IsDirectionChange (bool flagX)
-	{
-		if (_isAlongX == flagX) {
-			return false;
-		}
-		print ("op");
-
-		_isAlongX = flagX;
-		return true;
-	}
-
-	private void DeterminateCheckPointsByDistance ()
-	{
-		Vector3 temp = _checkPoints [0];
-		_anotherList.Add (temp);
-
-		for (int i = 0; i < _checkPoints.Count; i++) {
-			float dis = Vector3.Distance (temp, _points [i]);
-			if (dis > 0.5f) {
-				temp = _checkPoints [i];
-				_anotherList.Add (temp);
-			}
-		}
-	}
-
-	private void DeterminateCheckPoints ()
-	{
-		Vector2 temp = _points [0];
-		_checkPoints.Add (temp);
-
-		for (int i = 1; i < _points.Count-1; i++) {
-			Vector2 vect = _points [i] - temp;
-			Vector2 vect1 = _points [i + 1] - temp;
-			float t = Vector3.Angle (vect, vect1);
-
-			if (t > _angleOffset) {
-				temp = _points [i - 1];
-				_checkPoints.Add (temp);
-			}
-
-		}
-
-		//	_checkPoints.Add (_points [_points.Count - 1]);
-	}
-
-
-
-	private void CheckX ()
-	{
-		_direction = _nextPoint - _startPoint;
-		_currentDir = new Vector3 (_nextPoint.x, _startPoint.y) - _startPoint;
-		
-		float angle = Vector3.Angle (_direction, _currentDir);
-		print (angle);
-	}
-
-	private void CheckY ()
-	{
-		_direction = _nextPoint - _startPoint;
-		_currentDir = new Vector3 (_startPoint.x, _nextPoint.y) - _startPoint;
-		
-		float angle = Vector3.Angle (_direction, _currentDir);
-		print (angle);
-	}
 
 	public void DrawFigure (List <Vector2> list, LineRenderer line)
 	{

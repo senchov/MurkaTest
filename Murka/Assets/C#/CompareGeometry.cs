@@ -64,23 +64,31 @@ public class CompareGeometry : MonoBehaviour
 		}
 		#endregion
 
-		if (!_geometryBoundary.IsAddGeometry)
-			_drawGeometry.FinishDrawing += HandleFinishDrawing;
+
 
 		_geometryBoundary.LevelUp += HandleLevelUp;
+		_gameCntrl.StartGame += HandleStartGame;
+
+	}
+
+	void HandleStartGame ()
+	{
+		if (!_geometryBoundary.IsAddGeometry)
+			_drawGeometry.FinishDrawing += HandleFinishDrawing;
+		HandleLevelUp ();
 	}
 
 	private void HandleLevelUp ()
 	{
-		print ("comp");
+
 		_taskGeometry = CreateGeometry (_geometryBoundary.TaskGeometry);
 	}
 
 
 	private void Start ()
 	{
-		if (!_geometryBoundary.IsAddGeometry)
-			_taskGeometry = CreateGeometry (_geometryBoundary.TaskGeometry);
+		//if (!_geometryBoundary.IsAddGeometry)
+		//	_taskGeometry = CreateGeometry (_geometryBoundary.TaskGeometry);
 
 	}
 
@@ -141,8 +149,12 @@ public class CompareGeometry : MonoBehaviour
 
 	private Vector2 FindGeometryCentr (List<Vector2> list)
 	{
-		if (list.Count <= 1)
+		if (list == null)
+			return Vector2.zero;
+	
+		if (list.Count <= 1) {
 			return list [0];
+		}
 
 		if (list.Count == 2) {
 			Vector2 temp = new Vector2 ();
@@ -252,6 +264,8 @@ public class CompareGeometry : MonoBehaviour
 
 		if (_gameCntrl)
 			_gameCntrl.LevelUp -= HandleLevelUp;
+
+		_gameCntrl.StartGame -= HandleLevelUp;
 	}
 
 }

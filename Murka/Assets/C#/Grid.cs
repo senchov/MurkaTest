@@ -29,6 +29,10 @@ public class Grid : MonoBehaviour
 	private GeometryBoundary
 		_geometryBoundary;
 
+	[SerializeField]
+	private Transform
+		_gridParent;
+
 	private Vector2[,] _grid;
 
 	Vector3 _bottomLeftScreen, _bottomRightScreen, _topRightScreen;
@@ -68,11 +72,13 @@ public class Grid : MonoBehaviour
 			return;
 		}
 		#endregion
+
+		GenerateGrid ();
 	}
 
 	private void Start ()
 	{
-		GenerateGrid ();
+
 	}
 
 
@@ -129,7 +135,7 @@ public class Grid : MonoBehaviour
 				Vector3 point = new Vector3 (_grid [j, i].x, _grid [j, i].y, 0);
 				obj.transform.position = point;
 				obj.name = j.ToString () + " " + i.ToString ();
-				obj.transform.SetParent (gameObject.transform);
+				obj.transform.SetParent (_gridParent);
 			}
 		}
 
